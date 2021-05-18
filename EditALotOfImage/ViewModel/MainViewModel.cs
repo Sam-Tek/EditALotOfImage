@@ -126,7 +126,7 @@ namespace EditALotOfImage.ViewModel
                     ImagePreviewChanged = value;
                 }
                 else
-                    _imagePreview = @"C:\Users\samyr\Desktop\d85ccd36ba07942847806d5408d9e0d1.jpg";
+                    _imagePreview = DEFAULTIMAGE;
                 OnPropertyChanged("ImagePreview");
             }
         }

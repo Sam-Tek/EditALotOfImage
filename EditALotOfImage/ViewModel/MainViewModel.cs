@@ -90,7 +90,7 @@ namespace EditALotOfImage.ViewModel
                     _mif.ListPathImage = ItemDirectory.ToList<string>();
                     _mif.EditAll(ItemResizeSelected, ValueContrast, ValueBrightness, PathDirectory);
                     ImagePreviewChanged = ImagePreview;
-                    MessageBox.Show("Images are saved");
+                    MessageBox.Show("Images are saved !!!");
                 });
             }
         }

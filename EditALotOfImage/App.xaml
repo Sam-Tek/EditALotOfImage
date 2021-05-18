@@ -1,0 +1,14 @@
+﻿<Application x:Class="EditALotOfImage.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:EditALotOfImage"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate x:Key="ListItemFromDirectory">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding}" Width="100"/>
+                <TextBlock Text="{Binding}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Application.Resources>
+</Application>

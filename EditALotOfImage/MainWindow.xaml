@@ -1,0 +1,36 @@
+﻿<Window x:Class="EditALotOfImage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EditALotOfImage"
+        Closing="Window_Closing"
+        Title="Edit A Lot Of Image" Height="450" Width="800">
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Label Content="{Binding PathDirectory}" Grid.Row="0" Grid.Column="0"/>
+        <Button Content="Parcourir" Command="{Binding SelectPathDirectory}" Grid.Row="0" Grid.Column="2"/>
+        <ComboBox Grid.ColumnSpan="3" ItemsSource="{Binding ItemDirectory}" SelectedItem="{Binding ImagePreview}" ItemTemplate="{DynamicResource ListItemFromDirectory}" Grid.Row="1" />
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2">
+            <Label Content="Taille Image Ratio"/>
+            <ComboBox ItemsSource="{Binding ItemResize}" SelectedItem="{Binding ItemResizeSelected}"/>
+            <Label Content="Brightness"/>
+            <Slider Minimum="0" Maximum="100" Value="{Binding ValueBrightness}"/>
+            <Label Content="Contrast"/>
+            <Slider Minimum="0" Maximum="100" Value="{Binding ValueContrast}"/>
+            <Button Content="Save All" Command="{Binding SaveAllImage}"/>
+        </StackPanel>
+        <Image Grid.Column="0" Grid.Row="2" Source="{Binding ImagePreview}" />
+        <Image Grid.Column="1" Grid.Row="2" Source="{Binding ImagePreviewChanged}" />
+
+    </Grid>
+</Window>

@@ -92,7 +92,7 @@ namespace EditALotOfImage.EditImage
                         int heightImage = (image.Size.Height * ratio) / 100;
                         System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
                         newNameImageInDirectoryBuffer = GetRandName(GetFileName(pathImage));
-                        imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
+                        imageFactory.Load(inStream).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
                     }
                 }
             }

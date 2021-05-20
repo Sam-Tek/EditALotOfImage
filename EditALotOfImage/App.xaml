@@ -6,7 +6,7 @@
     <Application.Resources>
         <DataTemplate x:Key="ListItemFromDirectory">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding}" Width="100"/>
+                <!--<Image Source="{Binding}" Width="100"/>-->
                 <TextBlock Text="{Binding}"/>
             </StackPanel>
         </DataTemplate>

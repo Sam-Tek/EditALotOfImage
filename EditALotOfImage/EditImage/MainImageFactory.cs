@@ -25,25 +25,25 @@ namespace EditALotOfImage.EditImage
 
         public string GetRandName(string path)
         {
-            return new Random().Next(1000000, 9999999).ToString()+Path.GetExtension(path);
+            return new Random().Next(1000000, 9999999).ToString() + Path.GetExtension(path);
         }
 
         public void RemoveBuffer(string path)
         {
             if (Directory.Exists(DirectoryBuffer))
             {
-            foreach (var item in Directory.GetFiles(DirectoryBuffer))
-            {
-                try
+                foreach (var item in Directory.GetFiles(DirectoryBuffer))
                 {
-                    File.Delete(item);
+                    try
+                    {
+                        File.Delete(item);
+                    }
+                    catch (Exception e)
+                    {
+                        //MessageBox.Show(e.Message);
+                        //MessageBox.Show(System.AppContext.BaseDirectory);
+                    }
                 }
-                catch (Exception e)
-                {
-                    //MessageBox.Show(e.Message);
-                    //MessageBox.Show(System.AppContext.BaseDirectory);
-                }
-            }
             }
         }
 
@@ -92,7 +92,7 @@ namespace EditALotOfImage.EditImage
                         int heightImage = (image.Size.Height * ratio) / 100;
                         System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
                         newNameImageInDirectoryBuffer = GetRandName(GetFileName(pathImage));
-                        imageFactory.Load(inStream).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
+                        imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
                     }
                 }
             }

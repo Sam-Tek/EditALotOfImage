@@ -24,9 +24,9 @@
             <Label Content="Taille Image Ratio"/>
             <ComboBox ItemsSource="{Binding ItemResize}" SelectedItem="{Binding ItemResizeSelected}"/>
             <Label Content="Brightness"/>
-            <Slider Minimum="0" Maximum="100" Value="{Binding ValueBrightness}"/>
+            <Slider Minimum="0" Maximum="100" Value="{Binding ValueBrightness, UpdateSourceTrigger=Default}"/>
             <Label Content="Contrast"/>
-            <Slider Minimum="0" Maximum="100" Value="{Binding ValueContrast}"/>
+            <Slider Minimum="0" Maximum="100" Value="{Binding ValueContrast, UpdateSourceTrigger=Default}"/>
             <Button Content="Save All" Command="{Binding SaveAllImage}"/>
         </StackPanel>
         <Image Grid.Column="0" Grid.Row="2" Source="{Binding ImagePreview}" />

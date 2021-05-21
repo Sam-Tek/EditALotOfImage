@@ -71,8 +71,6 @@ namespace EditALotOfImage.ViewModel
                         PathDirectory = openFileDlg.SelectedPath;
                         if (PathDirectory.Length > 0)
                         {
-                            //Regex rx = new Regex(@"(\.jpg|\.png)$", RegexOptions.IgnoreCase);
-                            //ItemDirectory = new ObservableCollection<string>(Directory.GetFiles(PathDirectory).Where(f => rx.IsMatch(f)));
                             Task<ObservableCollection<string>> taskResult = Task.Run<ObservableCollection<string>>(() =>
                                 new ObservableCollection<string>(Directory.GetFiles(PathDirectory).Where(f => (new Regex(@"(\.jpg|\.png)$", RegexOptions.IgnoreCase)).IsMatch(f))));
                             ItemDirectory = taskResult.Result;

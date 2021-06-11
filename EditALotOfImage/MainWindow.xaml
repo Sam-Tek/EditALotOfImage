@@ -16,6 +16,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="10*"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <Label Content="{Binding PathDirectory}" Grid.Row="0" Grid.Column="0"/>
         <Button Content="Parcourir" Command="{Binding SelectPathDirectory}" Grid.Row="0" Grid.Column="2"/>
@@ -31,6 +32,6 @@
         </StackPanel>
         <Image Grid.Column="0" Grid.Row="2" Source="{Binding ImagePreview}" />
         <Image Grid.Column="1" Grid.Row="2" Source="{Binding ImagePreviewChanged}" />
-
+        <ProgressBar Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Minimum="0" Maximum="100" Value="{Binding ProgressBar}"/>
     </Grid>
 </Window>

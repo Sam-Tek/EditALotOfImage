@@ -41,6 +41,7 @@ namespace EditALotOfImage.ViewModel
 
         private int _valueBrightness;
 
+        private int _progressBar;
 
         public MainViewModel()
         {
@@ -52,6 +53,7 @@ namespace EditALotOfImage.ViewModel
             _itemResizeSelected = 100;
             _valueContrast = 0;
             _valueBrightness = 0;
+            _progressBar = 0;
         }
 
         protected void OnPropertyChanged(string name)
@@ -193,8 +195,21 @@ namespace EditALotOfImage.ViewModel
             _mif.RemoveBuffer(PathDirectory);
             if (ImagePreviewChanged != DEFAULTIMAGE)
             {
+                ProgressBar = 50;//teste progressbar
                 Task<string> taskResult = Task.Run<string>(() => _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged));
                 ImagePreviewChanged = taskResult.Result;
+                ProgressBar = 100;//teste progressbar
+            }
+        }
+
+        //https://devblogs.microsoft.com/dotnet/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
+        public int ProgressBar
+        {
+            get { return _progressBar; }
+            set 
+            { 
+                _progressBar = value;
+                OnPropertyChanged("ProgressBar");
             }
         }
     }

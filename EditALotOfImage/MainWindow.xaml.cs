@@ -38,5 +38,10 @@ namespace EditALotOfImage
         {
             //_mvm.RemoveBuffer();
         }
+
+        private void Slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            _mvm.RunEditorPreview();
+        }
     }
 }

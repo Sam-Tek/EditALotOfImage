@@ -138,12 +138,7 @@ namespace EditALotOfImage.ViewModel
             get { return _imagePreviewChanged; }
             set
             {
-                _mif.RemoveBuffer(PathDirectory);
-                if (value != DEFAULTIMAGE)
-                {
-                    Task<string> taskResult = Task.Run<string>(() => _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, value));
-                    _imagePreviewChanged = taskResult.Result;
-                }
+                _imagePreviewChanged = value;
                 OnPropertyChanged("ImagePreviewChanged");
             }
         }
@@ -190,6 +185,16 @@ namespace EditALotOfImage.ViewModel
             {
                 _valueBrightness = value;
                 ImagePreviewChanged = ImagePreview;
+            }
+        }
+
+        public void RunEditorPreview()
+        {
+            _mif.RemoveBuffer(PathDirectory);
+            if (ImagePreviewChanged != DEFAULTIMAGE)
+            {
+                Task<string> taskResult = Task.Run<string>(() => _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged));
+                ImagePreviewChanged = taskResult.Result;
             }
         }
     }

@@ -43,6 +43,8 @@ namespace EditALotOfImage.ViewModel
 
         private int _progressBar;
 
+        private Progress<int> _progressIndicator;
+
         public MainViewModel()
         {
             _mif = new MainImageFactory();
@@ -54,6 +56,7 @@ namespace EditALotOfImage.ViewModel
             _valueContrast = 0;
             _valueBrightness = 0;
             _progressBar = 0;
+            _progressIndicator = new Progress<int>(ReportProgress);
         }
 
         protected void OnPropertyChanged(string name)
@@ -91,9 +94,8 @@ namespace EditALotOfImage.ViewModel
                 return new RelayCommand(param =>
                 {
                     _mif.ListPathImage = ItemDirectory.ToList<string>();
-                    _mif.EditAll(ItemResizeSelected, ValueContrast, ValueBrightness, PathDirectory);
+                    Task.Run(() => _mif.EditAll(ItemResizeSelected, ValueContrast, ValueBrightness, PathDirectory, _progressIndicator));
                     ImagePreviewChanged = ImagePreview;
-                    MessageBox.Show("Images are saved !!!");
                 });
             }
         }
@@ -190,26 +192,29 @@ namespace EditALotOfImage.ViewModel
             }
         }
 
-        public void RunEditorPreview()
-        {
-            _mif.RemoveBuffer(PathDirectory);
-            if (ImagePreviewChanged != DEFAULTIMAGE)
-            {
-                ProgressBar = 50;//teste progressbar
-                Task<string> taskResult = Task.Run<string>(() => _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged));
-                ImagePreviewChanged = taskResult.Result;
-                ProgressBar = 100;//teste progressbar
-            }
-        }
-
         //https://devblogs.microsoft.com/dotnet/async-in-4-5-enabling-progress-and-cancellation-in-async-apis/
         public int ProgressBar
         {
             get { return _progressBar; }
-            set 
-            { 
+            set
+            {
                 _progressBar = value;
                 OnPropertyChanged("ProgressBar");
+            }
+        }
+        void ReportProgress(int value)
+        {
+            ProgressBar = value;
+        }
+        public async void RunEditorPreview()
+        {
+            _mif.RemoveBuffer(PathDirectory);
+            if (ImagePreviewChanged != DEFAULTIMAGE)
+            {
+                //Task<string> taskResult = Task.Run<string>(() => _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged));
+                //ImagePreviewChanged = taskResult.Result; 
+                ImagePreviewChanged = await _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged, _progressIndicator);
+                
             }
         }
     }

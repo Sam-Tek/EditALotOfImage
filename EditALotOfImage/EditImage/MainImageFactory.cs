@@ -47,35 +47,45 @@ namespace EditALotOfImage.EditImage
             }
         }
 
-        public string EditAll(int ratio, int contrast, int brightness, string pathToSave)
+        public async Task EditAll(int ratio, int contrast, int brightness, string pathToSave, IProgress<int> progress)
         {
             string newNameImageInDirectoryBuffer = "";
-            foreach (string PathImage in ListPathImage)
+            int totalCount = ListPathImage.Count-1;
+            await Task.Run(() =>
             {
-                byte[] photoBytes = File.ReadAllBytes(PathImage);
-                // Format is automatically detected though can be changed.
-                using (MemoryStream inStream = new MemoryStream(photoBytes))
+                int tempCount = 0;
+                foreach (string PathImage in ListPathImage)
                 {
-                    using (MemoryStream outStream = new MemoryStream())
+                    byte[] photoBytes = File.ReadAllBytes(PathImage);
+                    // Format is automatically detected though can be changed.
+                    using (MemoryStream inStream = new MemoryStream(photoBytes))
                     {
-                        // Initialize the ImageFactory using the overload to preserve EXIF metadata.
-                        using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
+                        using (MemoryStream outStream = new MemoryStream())
                         {
-                            // Load, resize, set the format and quality and save an image.
-                            Image image = imageFactory.Load(inStream).Image;
-                            int widthImage = (image.Size.Width * ratio) / 100;
-                            int heightImage = (image.Size.Height * ratio) / 100;
-                            System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
-                            newNameImageInDirectoryBuffer = GetRandName(GetFileName(PathImage));
-                            imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{pathToSave}{NewDirectory}{GetFileName(PathImage)}");
+                            // Initialize the ImageFactory using the overload to preserve EXIF metadata.
+                            using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
+                            {
+                                // Load, resize, set the format and quality and save an image.
+                                Image image = imageFactory.Load(inStream).Image;
+                                int widthImage = (image.Size.Width * ratio) / 100;
+                                int heightImage = (image.Size.Height * ratio) / 100;
+                                System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
+                                newNameImageInDirectoryBuffer = GetRandName(GetFileName(PathImage));
+                                imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{pathToSave}{NewDirectory}{GetFileName(PathImage)}");
+                                progress.Report(tempCount * 100 / totalCount);
+                                tempCount++;
+                            }
                         }
                     }
+                    //suspicious behavior with tempCount when is after using
+                    //progress.Report((tempCount * 100 / totalCount));
+                    //tempCount++;
                 }
-            }
-            return DirectoryBuffer + newNameImageInDirectoryBuffer;
+                MessageBox.Show("Images are saved !!!");
+            });
         }
 
-        public string Edit(int ratio, int contrast, int brightness, string pathImage)
+        public async Task<string> Edit(int ratio, int contrast, int brightness, string pathImage, IProgress<int> progress)
         {
             string newNameImageInDirectoryBuffer = "";
             byte[] photoBytes = File.ReadAllBytes(pathImage);
@@ -87,12 +97,20 @@ namespace EditALotOfImage.EditImage
                     // Initialize the ImageFactory using the overload to preserve EXIF metadata.
                     using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
                     {
-                        Image image = imageFactory.Load(inStream).Image;
-                        int widthImage = (image.Size.Width * ratio) / 100;
-                        int heightImage = (image.Size.Height * ratio) / 100;
-                        System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
-                        newNameImageInDirectoryBuffer = GetRandName(GetFileName(pathImage));
-                        imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
+                        await Task.Run(() =>
+                        {
+                            progress.Report(10);
+                            Image image = imageFactory.Load(inStream).Image;
+                            progress.Report(20);
+                            int widthImage = (image.Size.Width * ratio) / 100;
+                            int heightImage = (image.Size.Height * ratio) / 100;
+                            progress.Report(40);
+                            System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
+                            newNameImageInDirectoryBuffer = GetRandName(GetFileName(pathImage));
+                            progress.Report(60);
+                            imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
+                            progress.Report(100);
+                        });
                     }
                 }
             }

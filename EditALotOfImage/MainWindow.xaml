@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EditALotOfImage"
         Closing="Window_Closing"
-        Title="Edit A Lot Of Image" Height="450" Width="800">
+        Title="Edit A Lot Of Images" Height="450" Width="800">
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -19,10 +19,10 @@
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <Label Content="{Binding PathDirectory}" Grid.Row="0" Grid.Column="0"/>
-        <Button Content="Parcourir" Command="{Binding SelectPathDirectory}" Grid.Row="0" Grid.Column="2"/>
+        <Button Content="Browse" Command="{Binding SelectPathDirectory}" Grid.Row="0" Grid.Column="2"/>
         <ComboBox Grid.ColumnSpan="3" ItemsSource="{Binding ItemDirectory}" SelectedItem="{Binding ImagePreview}" ItemTemplate="{DynamicResource ListItemFromDirectory}" Grid.Row="1" />
         <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="2">
-            <Label Content="Taille Image Ratio"/>
+            <Label Content="Picture size"/>
             <ComboBox ItemsSource="{Binding ItemResize}" SelectedItem="{Binding ItemResizeSelected}"/>
             <Label Content="Brightness"/>
             <Slider Minimum="0" Maximum="100" Value="{Binding ValueBrightness, UpdateSourceTrigger=PropertyChanged}" Thumb.DragCompleted="Slider_DragCompleted"/>

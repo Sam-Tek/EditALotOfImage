@@ -95,7 +95,6 @@ namespace EditALotOfImage.ViewModel
                 {
                     _mif.ListPathImage = ItemDirectory.ToList<string>();
                     Task.Run(() => _mif.EditAll(ItemResizeSelected, ValueContrast, ValueBrightness, PathDirectory, _progressIndicator));
-                    ImagePreviewChanged = ImagePreview;
                 });
             }
         }
@@ -162,7 +161,7 @@ namespace EditALotOfImage.ViewModel
             set
             {
                 _itemResizeSelected = value;
-                ImagePreviewChanged = ImagePreview;
+                RunEditorPreview();
             }
         }
 
@@ -175,7 +174,6 @@ namespace EditALotOfImage.ViewModel
             set
             {
                 _valueContrast = value;
-                ImagePreviewChanged = ImagePreview;
             }
         }
 
@@ -188,7 +186,6 @@ namespace EditALotOfImage.ViewModel
             set
             {
                 _valueBrightness = value;
-                ImagePreviewChanged = ImagePreview;
             }
         }
 
@@ -209,12 +206,11 @@ namespace EditALotOfImage.ViewModel
         public async void RunEditorPreview()
         {
             _mif.RemoveBuffer(PathDirectory);
-            if (ImagePreviewChanged != DEFAULTIMAGE)
+            if (ImagePreview != DEFAULTIMAGE)
             {
                 //Task<string> taskResult = Task.Run<string>(() => _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged));
                 //ImagePreviewChanged = taskResult.Result; 
-                ImagePreviewChanged = await _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreviewChanged, _progressIndicator);
-                
+                ImagePreviewChanged = await _mif.Edit(ItemResizeSelected, ValueContrast, ValueBrightness, ImagePreview, _progressIndicator);
             }
         }
     }

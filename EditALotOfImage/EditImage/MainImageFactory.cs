@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -47,7 +48,7 @@ namespace EditALotOfImage.EditImage
             }
         }
 
-        public async Task EditAll(int ratio, int contrast, int brightness, string pathToSave, IProgress<int> progress)
+        public async Task EditAll(int ratio, int contrast, int brightness, string pathToSave, IProgress<int> progress, CancellationToken canceltoken)
         {
             string newNameImageInDirectoryBuffer = "";
             int totalCount = ListPathImage.Count-1;
@@ -77,9 +78,16 @@ namespace EditALotOfImage.EditImage
                             }
                         }
                     }
+                    if (canceltoken.IsCancellationRequested)
+                    {
+                        MessageBox.Show("Operation is canceled");
+                        progress.Report(100);
+                        break;
+                    }
                 }
-                MessageBox.Show("Images are saved !!!");
-            });
+                if (!canceltoken.IsCancellationRequested)
+                    MessageBox.Show("Images are saved !!!");
+            },canceltoken);
         }
 
         public async Task<string> Edit(int ratio, int contrast, int brightness, string pathImage, IProgress<int> progress)

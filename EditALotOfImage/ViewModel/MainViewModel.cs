@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -45,6 +46,7 @@ namespace EditALotOfImage.ViewModel
 
         private Progress<int> _progressIndicator;
 
+        private CancellationTokenSource _cancelTokenSource;
         public MainViewModel()
         {
             _mif = new MainImageFactory();
@@ -93,9 +95,24 @@ namespace EditALotOfImage.ViewModel
             {
                 return new RelayCommand(param =>
                 {
+                    _cancelTokenSource = new CancellationTokenSource();
                     _mif.ListPathImage = ItemDirectory.ToList<string>();
-                    Task.Run(() => _mif.EditAll(ItemResizeSelected, ValueContrast, ValueBrightness, PathDirectory, _progressIndicator));
+                    Task.Run(() => _mif.EditAll(ItemResizeSelected, ValueContrast, ValueBrightness, PathDirectory, _progressIndicator, _cancelTokenSource.Token));
                 });
+            }
+        }
+
+        public ICommand cancelSaveAction
+        {
+            get
+            {
+                return new RelayCommand(param =>
+                {
+
+                    _cancelTokenSource.Cancel();
+                    _cancelTokenSource.Dispose();
+                    _cancelTokenSource = null;
+                },p => _cancelTokenSource != null);
             }
         }
 

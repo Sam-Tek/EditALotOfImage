@@ -77,9 +77,6 @@ namespace EditALotOfImage.EditImage
                             }
                         }
                     }
-                    //suspicious behavior with tempCount when is after using
-                    //progress.Report((tempCount * 100 / totalCount));
-                    //tempCount++;
                 }
                 MessageBox.Show("Images are saved !!!");
             });

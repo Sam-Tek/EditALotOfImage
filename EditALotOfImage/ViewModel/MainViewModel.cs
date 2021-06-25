@@ -32,7 +32,7 @@ namespace EditALotOfImage.ViewModel
 
         private string _imagePreview;
 
-        private string _imagePreviewChanged;
+        private BitmapImage _imagePreviewChanged;
 
         private ObservableCollection<int> _itemResize;
 
@@ -52,7 +52,7 @@ namespace EditALotOfImage.ViewModel
             _mif = new MainImageFactory();
             _pathDirectory = "Path Of Directory";
             _imagePreview = DEFAULTIMAGE;
-            _imagePreviewChanged = DEFAULTIMAGE;
+            _imagePreviewChanged = new BitmapImage(new Uri(DEFAULTIMAGE));
             _itemResize = new ObservableCollection<int>() { 25, 50, 75, 100 };
             _itemResizeSelected = 100;
             _valueContrast = 0;
@@ -144,7 +144,7 @@ namespace EditALotOfImage.ViewModel
                 if (!string.IsNullOrEmpty(value))
                 {
                     _imagePreview = value;
-                    ImagePreviewChanged = value;
+                    ImagePreviewChanged = new BitmapImage(new Uri(value));
                 }
                 else
                     _imagePreview = DEFAULTIMAGE;
@@ -153,7 +153,7 @@ namespace EditALotOfImage.ViewModel
         }
 
 
-        public string ImagePreviewChanged
+        public BitmapImage ImagePreviewChanged
         {
             get { return _imagePreviewChanged; }
             set

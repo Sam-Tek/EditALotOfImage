@@ -90,8 +90,9 @@ namespace EditALotOfImage.EditImage
             },canceltoken);
         }
 
-        public async Task<string> Edit(int ratio, int contrast, int brightness, string pathImage, IProgress<int> progress)
+        public async Task<BitmapImage> Edit(int ratio, int contrast, int brightness, string pathImage, IProgress<int> progress)
         {
+            BitmapImage bitmapR = new BitmapImage();
             string newNameImageInDirectoryBuffer = "";
             byte[] photoBytes = File.ReadAllBytes(pathImage);
             // Format is automatically detected though can be changed.
@@ -113,13 +114,29 @@ namespace EditALotOfImage.EditImage
                             System.Drawing.Size resizeImage = new System.Drawing.Size(widthImage, heightImage);
                             newNameImageInDirectoryBuffer = GetRandName(GetFileName(pathImage));
                             progress.Report(60);
-                            imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
+                            //imageFactory.Load(inStream).Resize(resizeImage).Contrast(contrast).Brightness(brightness).Save($"{DirectoryBuffer}{newNameImageInDirectoryBuffer}");
+
+                            imageFactory.Load(inStream).
+                            Resize(resizeImage).
+                            Contrast(contrast).
+                            Brightness(brightness).
+                            Save(outStream);
+
+                            //convert memorystream with a bitmapimage
+                            BitmapImage bitmap = new BitmapImage();
+                            bitmap.BeginInit();
+                            bitmap.StreamSource = outStream;
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.EndInit();
+                            bitmap.Freeze();
+                            bitmapR = bitmap;
                             progress.Report(100);
                         });
                     }
                 }
             }
-            return $"{DirectoryBuffer}{newNameImageInDirectoryBuffer}";
+            //return $"{DirectoryBuffer}{newNameImageInDirectoryBuffer}";
+            return bitmapR;
         }
     }
 }
